@@ -3,7 +3,7 @@ from handlers.interestForm import *
 
 def handler(event, context):
     print('event: ', event)
-    body = json.loads(event['body'])
+    body = event.get('body')
     print('body: ', body)
     if body['type'] == 'interest form submission':
         return InterestFormSubmissionHandler(body)
