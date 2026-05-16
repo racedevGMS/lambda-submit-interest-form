@@ -12,7 +12,7 @@ def InterestFormSubmissionHandler(body):
     print("Form data received:")
     print(form)
     # Process the interest form submission
-    # For example, save the data to a database or send an email notification
+    
     return {
         'statusCode': 200,
         'body': json.dumps({'message': 'Interest form submitted successfully'})
