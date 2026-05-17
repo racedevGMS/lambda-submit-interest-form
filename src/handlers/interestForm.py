@@ -1,8 +1,32 @@
 import json
+import os
+import urllib.request
+import urllib.parse
 from db import save_submission
+
+_RECAPTCHA_SECRET = os.getenv("RECAPTCHA_SECRET_KEY")
+_RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify"
+_SCORE_THRESHOLD = 0.5
+
+def _verify_recaptcha(token: str) -> bool:
+    data = urllib.parse.urlencode({
+        "secret": _RECAPTCHA_SECRET,
+        "response": token,
+    }).encode()
+    req = urllib.request.Request(_RECAPTCHA_URL, data=data)
+    with urllib.request.urlopen(req, timeout=5) as resp:
+        result = json.loads(resp.read())
+    return result.get("success") and result.get("score", 0) >= _SCORE_THRESHOLD
 
 def InterestFormSubmissionHandler(body):
     try:
+        token = body.get("recaptchaToken")
+        if not token or not _verify_recaptcha(token):
+            return {
+                "statusCode": 400,
+                "body": json.dumps({"message": "reCAPTCHA verification failed"}),
+            }
+
         form = body['data']
         item = save_submission(
             full_name=form['full_name'],
