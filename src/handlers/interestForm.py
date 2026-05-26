@@ -1,6 +1,6 @@
 import json
 from db import save_submission
-from email_service import send_interest_form_email
+# from email_service import send_interest_form_email
 
 def InterestFormSubmissionHandler(body):
     try:
@@ -13,7 +13,7 @@ def InterestFormSubmissionHandler(body):
             message=form.get('message', ''),
         )
         print("Saved submission:", item['submission_id'])
-        send_interest_form_email(form, item['submission_id'])
+        # send_interest_form_email(form, item['submission_id'])
         return {
             'statusCode': 200,
             'body': json.dumps({'message': 'Interest form submitted successfully', 'id': item['submission_id']})
