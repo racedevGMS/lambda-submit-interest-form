@@ -52,11 +52,6 @@ jobs:
           aws lambda wait function-updated \
             --function-name ${{ env.LAMBDA_FUNCTION_NAME }}
 
-      - name: Update Lambda environment variables
-        run: |
-          aws lambda update-function-configuration \
-            --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
-            --environment Variables="{JWT_SECRET_NAME=gms-racecars/jwt-secret,RECAPTCHA_SECRET_KEY=${{ secrets.RECAPTCHA_SECRET_KEY }},NOTIFY_FROM_EMAIL=${{ secrets.NOTIFY_FROM_EMAIL }},NOTIFY_TO_EMAIL=${{ secrets.NOTIFY_TO_EMAIL }}}"
 
       - name: Deployment complete
         run: |
